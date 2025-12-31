@@ -1,18 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-// Home Page
+// --- PAGES (Views) ---
 Route::get('/', function () {
     return view('home');
 })->name('home');
 
-// Login Page
 Route::get('/login', function () {
     return view('login');
 })->name('login');
 
-// Register Page
 Route::get('/register', function () {
     return view('register');
 })->name('register');
+
+// --- LOGIC (Actions) ---
+// This is the missing line causing your error:
+Route::post('/register', [AuthController::class, 'registerUser'])->name('register.submit');
+
+Route::post('/login', [AuthController::class, 'loginUser'])->name('login.submit');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
