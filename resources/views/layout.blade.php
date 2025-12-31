@@ -22,17 +22,23 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Products</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
 
-                    @if(Auth::check())
-                        <li class="nav-item"><a class="nav-link" href="#">My Cart</a></li>
-                        <li class="nav-item"><a class="nav-link btn btn-light text-primary ms-2" href="#">{{ Auth::user()->name }}</a></li>
-                    @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
-                    @endif
-                </ul>
+    @auth
+        <li class="nav-item">
+            <span class="nav-link text-warning">Hello, {{ Auth::user()->name }}!</span>
+        </li>
+        <li class="nav-item">
+            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                @csrf
+                <button class="btn btn-link nav-link" style="text-decoration: none;">Logout</button>
+            </form>
+        </li>
+    @else
+        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
+    @endauth
+</ul>
             </div>
         </div>
     </nav>
