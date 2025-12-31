@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique(); // The coupon code (e.g., 'SALE2026')
+            $table->integer('discount_amount'); // How much Rp to cut off
+            $table->integer('min_purchase')->default(0); // Minimum spend requirement
+            $table->boolean('is_active')->default(true); // Turn off without deleting
             $table->timestamps();
         });
     }

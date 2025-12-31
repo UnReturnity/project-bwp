@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            // Connects to categories table. If category is deleted, this prevents errors.
+            $table->foreignId('category_id')->constrained();
+            $table->integer('stock');
+            $table->decimal('price', 10, 2);
+            $table->string('image')->nullable(); // For the bread photos
             $table->timestamps();
         });
     }

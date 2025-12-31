@@ -17,6 +17,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            // --- NEW CODE START ---
+            // 1 = Admin, 2 = Customer
+            // We use default(2) so standard registers become Customers automatically
+            $table->foreignId('role_id')->default(2);
+            // --- NEW CODE END ---
+
             $table->rememberToken();
             $table->timestamps();
         });

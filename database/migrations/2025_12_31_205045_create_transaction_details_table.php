@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('transaction_details', function (Blueprint $table) {
             $table->id();
+            // Link to the main transaction header
+            $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
+            // Link to the product bought
+            $table->foreignId('product_id')->constrained();
+            $table->integer('quantity');
+            // Price at the time of purchase (in case product price changes later)
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }
