@@ -9,18 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('carts', function (Blueprint $table) {
-            $table->id();
-            // Link to the user who owns the cart
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            // Link to the product added
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->default(1);
-            $table->timestamps();
-        });
-    }
+  public function up(): void
+{
+    Schema::create('carts', function (Blueprint $table) {
+        $table->id();
+        // Who owns this cart item?
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        // What product is it?
+        $table->foreignId('product_id')->constrained()->onDelete('cascade');
+        // How many?
+        $table->integer('quantity')->default(1);
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
