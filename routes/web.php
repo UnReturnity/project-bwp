@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CartController; // <--- Added this so Cart works!
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\TransactionController;
 
-// --- HOMEPAGE = PRODUCT LIST ---
-// Now when you go to "localhost:8000", you see the Shop immediately.
+
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
 // --- AUTH PAGES (Views) ---
@@ -31,3 +31,5 @@ Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.
 
 
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+Route::post('/checkout', [TransactionController::class, 'checkout'])->name('checkout');
+Route::get('/history', [TransactionController::class, 'index'])->name('history.index');

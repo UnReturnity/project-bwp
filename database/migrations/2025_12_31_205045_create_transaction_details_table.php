@@ -6,27 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('transaction_details', function (Blueprint $table) {
             $table->id();
-            // Link to the main transaction header
-            $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
-            // Link to the product bought
-            $table->foreignId('product_id')->constrained();
+            // This links to the file we just fixed above
+            $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
-            // Price at the time of purchase (in case product price changes later)
-            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('transaction_details');

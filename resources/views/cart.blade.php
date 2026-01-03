@@ -37,7 +37,11 @@
             </div>
             <div class="card-footer d-flex justify-content-between align-items-center">
                 <h4>Total: Rp {{ number_format($total, 0, ',', '.') }}</h4>
-                <button class="btn btn-success">Checkout Now</button>
+
+                <form action="{{ route('checkout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-success">Checkout Now</button>
+                </form>
             </div>
         </div>
     @endif
