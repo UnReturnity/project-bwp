@@ -68,4 +68,43 @@ class AdminController extends Controller
 
         return redirect()->route('admin.dashboard')->with('success', 'Product deleted!');
     }
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('admin.edit', compact('product'));
+    }
+
+    // 5. Save the Changes
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        // Validation (Image is nullable here because they might not want to change it)
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Update Name and Price
+        $product->name = $request->name;
+        $product->price = $request->price;
+
+        // Check if there is a NEW image
+        if ($request->hasFile('image')) {
+            // 1. Delete the old image to save space
+            if (file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+
+            // 2. Upload the new image
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $product->image = 'images/' . $imageName;
+        }
+
+        $product->save();
+
+        return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
+    }
 }

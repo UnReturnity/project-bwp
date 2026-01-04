@@ -12,8 +12,7 @@
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>Image</th>
+                        <th>No</th> <th>Image</th>
                         <th>Name</th>
                         <th>Price</th>
                         <th>Actions</th>
@@ -22,15 +21,21 @@
                 <tbody>
                     @foreach($products as $product)
                     <tr>
-                        <td>{{ $product->id }}</td>
+                        <td>{{ $loop->iteration }}</td>
+
                         <td>
-                            <img src="{{ $product->image }}" width="50" height="50" style="object-fit: cover; border-radius: 5px;">
+                            <img src="{{ asset($product->image) }}" width="50" height="50" style="object-fit: cover; border-radius: 5px;">
                         </td>
                         <td>{{ $product->name }}</td>
                         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm">Edit</button>
-                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <a href="{{ route('admin.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+                            <form action="{{ route('admin.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
