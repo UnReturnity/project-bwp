@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TransactionController;
-
+use App\Http\Controllers\AdminController;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
@@ -33,3 +33,10 @@ Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::post('/checkout', [TransactionController::class, 'checkout'])->name('checkout');
 Route::get('/history', [TransactionController::class, 'index'])->name('history.index');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
+    Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
+    Route::delete('/admin/delete/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+});

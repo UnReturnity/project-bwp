@@ -18,12 +18,14 @@ class AuthController extends Controller
             'password' => 'required|min:4'
         ]);
 
-        // 2. Create the User (Default Role = 2 for Customer)
+        // 2. Create the User
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 2
+
+            // FIX: We use 'is_admin' now, not 'role_id'
+            'is_admin' => false
         ]);
 
         // 3. Redirect to Login with success message
@@ -41,7 +43,14 @@ class AuthController extends Controller
         // 2. Try to Login
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
-            return redirect()->route('home'); // Success! Go Home
+
+            // --- NEW REDIRECT LOGIC START ---
+            if (Auth::user()->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
+            // --- NEW REDIRECT LOGIC END ---
+
+            return redirect()->route('home'); // Normal users go Home
         }
 
         // 3. If failed, go back

@@ -18,11 +18,12 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
-            // --- NEW CODE START ---
-            // 1 = Admin, 2 = Customer
-            // We use default(2) so standard registers become Customers automatically
-            $table->foreignId('role_id')->default(2);
-            // --- NEW CODE END ---
+            // --- CHANGED THIS SECTION ---
+            // We use a simple boolean (True/False) for Admins.
+            // 0 (False) = Customer
+            // 1 (True) = Admin
+            $table->boolean('is_admin')->default(0);
+            // ----------------------------
 
             $table->rememberToken();
             $table->timestamps();

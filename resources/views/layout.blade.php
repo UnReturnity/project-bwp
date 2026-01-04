@@ -27,9 +27,19 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
 
                     @auth
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold" href="{{ route('cart.show') }}">My Cart</a>
-                        </li>
+                        @if(Auth::user()->is_admin)
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold text-danger" href="{{ route('admin.dashboard') }}">🔥 Dashboard</a>
+                            </li>
+
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" href="{{ route('cart.show') }}">My Cart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('history.index') }}">History</a>
+                            </li>
+                        @endif
 
                         <li class="nav-item ms-2">
                             <span class="nav-link text-warning">Hello, {{ Auth::user()->name }}!</span>
@@ -41,6 +51,7 @@
                                 <button type="submit" class="btn btn-link nav-link" style="text-decoration: none; color: #ffcccc;">Logout</button>
                             </form>
                         </li>
+
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
