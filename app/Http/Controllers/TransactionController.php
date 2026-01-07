@@ -10,42 +10,53 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-    public function checkout()
+    public function checkout(Request $request)
     {
         // 1. Get the user's cart
-        $cartItems = Cart::where('user_id', Auth::id())->get();
+        $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
 
-        // Safety check: Is the cart empty?
-        if ($cartItems->isEmpty()) {
-            return redirect()->back()->with('error', 'Your cart is empty!');
+        if($cartItems->isEmpty()) {
+            return redirect()->back()->with('error', 'Cart is empty!');
         }
 
-        // 2. Create the Main Transaction (The Receipt Header)
+        // 2. Calculate Total Price
+        $total = 0;
+        foreach($cartItems as $item) {
+            $total += $item->product->price * $item->quantity;
+        }
+
+        // 3. Create Transaction
         $transaction = Transaction::create([
             'user_id' => Auth::id(),
             'transaction_date' => now(),
+            'total_price' => $total
         ]);
 
-        // 3. Move items from Cart to Transaction Details
+        // 4. Move items to Transaction Details
         foreach ($cartItems as $item) {
             TransactionDetail::create([
                 'transaction_id' => $transaction->id,
                 'product_id' => $item->product_id,
                 'quantity' => $item->quantity,
+                'price' => $item->product->price
             ]);
         }
 
-        // 4. Empty the Cart
+        // 5. Clear Cart
         Cart::where('user_id', Auth::id())->delete();
 
-        // 5. Go to History Page (We will build this next)
         return redirect()->route('history.index')->with('success', 'Checkout successful!');
     }
 
+    // Show the Order History for the logged-in user
     public function index()
     {
-        // Get all past transactions for this user
-        $transactions = Transaction::where('user_id', Auth::id())->with('details.product')->get();
-        return view('history', compact('transactions'));
+        // Get all transactions for this user, ordered by newest first
+        $transactions = Transaction::where('user_id', Auth::id())
+                        ->with('details.product') // Load the bread details too
+                        ->latest()
+                        ->get();
+
+        return view('history.index', compact('transactions'));
     }
 }

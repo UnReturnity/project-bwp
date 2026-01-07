@@ -4,16 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BWP Bakery</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
     <style>
-        body { background-color: #f8f9fa; }
-        .navbar { margin-bottom: 20px; }
+        /* 1. THE BAKERY BACKGROUND */
+        body {
+            /* A warm cream color (looks like dough) */
+            background-color: #FFF8E7;
+            /* The Fancy Font */
+            font-family: 'Merriweather', serif;
+            color: #5A3A22; /* Dark Coffee Color for text */
+        }
+
+        /* 2. THE NAVBAR (Bread Crust Color) */
+        .navbar-bakery {
+            background-color: #8B4513 !important; /* SaddleBrown */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 3. BUTTONS (Override the default blue buttons) */
+        .btn-primary {
+            background-color: #D2691E; /* Chocolate Color */
+            border-color: #D2691E;
+        }
+        .btn-primary:hover {
+            background-color: #A0522D; /* Darker Chocolate on hover */
+        }
+
+        /* 4. NAVBAR LINKS */
+        .nav-link {
+            color: #FFDEAD !important; /* NavajoWhite (Light cream) */
+        }
+        .nav-link:hover {
+            color: #fff !important; /* White on hover */
+        }
+
+        /* Custom Text Colors for Admin Links */
+        .text-admin-dashboard { color: #ff9999 !important; }
+        .text-admin-report { color: #99ff99 !important; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-bakery">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">🍞 BWP Bakery</a>
 
@@ -29,7 +65,10 @@
                     @auth
                         @if(Auth::user()->is_admin)
                             <li class="nav-item">
-                                <a class="nav-link fw-bold text-danger" href="{{ route('admin.dashboard') }}">🔥 Dashboard</a>
+                                <a class="nav-link fw-bold text-admin-dashboard" href="{{ route('admin.dashboard') }}">🔥 Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold text-admin-report" href="{{ route('admin.report') }}">📊 Report</a>
                             </li>
 
                         @else
@@ -42,13 +81,13 @@
                         @endif
 
                         <li class="nav-item ms-2">
-                            <span class="nav-link text-warning">Hello, {{ Auth::user()->name }}!</span>
+                            <span class="nav-link" style="color: #fff !important;">Hello, {{ Auth::user()->name }}!</span>
                         </li>
 
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-link nav-link" style="text-decoration: none; color: #ffcccc;">Logout</button>
+                                <button type="submit" class="btn btn-link nav-link" style="text-decoration: none;">Logout</button>
                             </form>
                         </li>
 
@@ -62,7 +101,7 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container py-4">
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif

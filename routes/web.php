@@ -24,21 +24,24 @@ Route::post('/login', [AuthController::class, 'loginUser'])->name('login.submit'
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // --- SHOP & CART LOGIC ---
-// (Optional) You can keep /products if you want, but "/" does the same thing now.
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-
 Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
-
-
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::post('/checkout', [TransactionController::class, 'checkout'])->name('checkout');
 Route::get('/history', [TransactionController::class, 'index'])->name('history.index');
 
+// --- ADMIN ROUTES (Protected) ---
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+
+    Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
+
     Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
     Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
     Route::delete('/admin/delete/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
     Route::get('/admin/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
     Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
+    Route::post('/admin/expense', [AdminController::class, 'storeExpense'])->name('admin.expense.store');
 });
