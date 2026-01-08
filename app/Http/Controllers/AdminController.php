@@ -171,4 +171,16 @@ class AdminController extends Controller
 
         return view('admin.report', compact('transactions', 'expenses', 'totalIncome', 'totalExpenses', 'profit', 'startDate', 'endDate'));
     }
+
+    public function destroyExpense($id)
+    {
+        // 1. Find the expense
+        $expense = Expense::findOrFail($id);
+
+        // 2. Delete it
+        $expense->delete();
+
+        // 3. Go back
+        return redirect()->back()->with('success', 'Expense deleted!');
+    }
 }

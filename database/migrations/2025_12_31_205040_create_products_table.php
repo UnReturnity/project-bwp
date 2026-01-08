@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            // Connects to categories. "constrained" means it MUST match a real category ID.
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-
             $table->string('name');
-            $table->text('description')->nullable(); // Good for showing details on the shop page
-            $table->integer('stock');
-            $table->decimal('price', 10, 2); // Allows cents (e.g., 15000.00)
+            $table->decimal('price', 10, 2);
             $table->string('image')->nullable();
 
+            
+            $table->integer('stock')->default(100);
+
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

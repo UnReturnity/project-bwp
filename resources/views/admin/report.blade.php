@@ -83,13 +83,26 @@
             <h5 class="text-danger">Expense History</h5>
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-sm">
-                    <thead><tr><th>Date</th><th>Desc</th><th>Amount</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Desc</th>
+                            <th>Amount</th>
+                            <th class="text-center">Action</th> </tr>
+                    </thead>
                     <tbody>
                         @foreach($expenses as $expense)
                         <tr>
                             <td>{{ $expense->date }}</td>
                             <td>{{ $expense->description }}</td>
                             <td>Rp {{ number_format($expense->amount, 0, ',', '.') }}</td>
+                            <td class="text-center">
+                                <form action="{{ route('admin.expense.destroy', $expense->id) }}" method="POST" onsubmit="return confirm('Delete this expense?');" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm py-0 px-2">×</button>
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

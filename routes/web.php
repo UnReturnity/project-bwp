@@ -44,4 +44,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
     Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
     Route::post('/admin/expense', [AdminController::class, 'storeExpense'])->name('admin.expense.store');
+    Route::delete('/admin/expense/delete/{id}', [AdminController::class, 'destroyExpense'])->name('admin.expense.destroy');
 });
