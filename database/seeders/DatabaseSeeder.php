@@ -32,8 +32,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Bakery Admin',
             'email' => 'bakery@bwp.com',
             'password' => bcrypt('password123'),
-            'is_admin' => true, // <--- THE FIX
-        ]);
+            'is_admin' => true,
+        ]); 
 
         // 1C. Customer (Needed for transactions below)
         $customer = User::create([
